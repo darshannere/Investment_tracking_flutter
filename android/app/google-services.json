@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "876849016338",
+    "project_id": "investment-tracking-app",
+    "storage_bucket": "investment-tracking-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876849016338:android:b837cfece07016818ff2cb",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "876849016338-e3495294jpu3ce0hdl9bj77kdshfiu58.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyL0K3_aUKcNlwpGNBxR9IiX3Tq901ehY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "876849016338-e3495294jpu3ce0hdl9bj77kdshfiu58.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
