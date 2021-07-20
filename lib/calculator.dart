@@ -69,7 +69,9 @@ class CalculatorState extends State<Calculator> {
                           flex: 1,
                           child: Column(children: [
                             Text(_tenureType,
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
                             Switch(
                                 value: _switchValue,
                                 onChanged: (bool value) {

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 
+// ignore: camel_case_types
 class news extends StatefulWidget {
   const news({Key? key}) : super(key: key);
 
@@ -12,6 +13,7 @@ class news extends StatefulWidget {
   _newsState createState() => _newsState();
 }
 
+// ignore: camel_case_types
 class _newsState extends State<news> {
   late var newsres = {};
 
