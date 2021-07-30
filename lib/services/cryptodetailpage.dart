@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 
+// ignore: camel_case_types
 class cryptodetailpage extends StatefulWidget {
   final List passedlist;
   final int passedindex;
