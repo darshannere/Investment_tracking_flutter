@@ -4,7 +4,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:project/home_page.dart';
 import 'package:project/services/process.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -40,11 +39,9 @@ class _stockdetailpageState extends State<stockdetailpage> {
   Future<String> getData2() async {
     var response = await http.get(
         Uri.parse(
-            'https://yahoo-finance-low-latency.p.rapidapi.com/v8/finance/chart/$stockname?region=IN&events=div%2Csplit'),
+            'https://yfapi.net/v8/finance/chart/$stockname?region=IN&events=div%2Csplit'),
         headers: {
-          "X-RapidAPI-Key":
-              "b5e366e646msh24e4c9775b01424p1a625fjsnf41e0d7c9961",
-          "x-rapidapi-host": "yahoo-finance-low-latency.p.rapidapi.com"
+          "x-api-key": "iD1ID0fAiz3hA5GxDuhYw1gmKJSqWLXIawvTJwci",
         });
     this.setState(() {
       stockchartdata = jsonDecode(response.body);
@@ -84,11 +81,9 @@ class _stockdetailpageState extends State<stockdetailpage> {
   Future<String> getData1() async {
     var response = await http.get(
         Uri.parse(
-            'https://yahoo-finance-low-latency.p.rapidapi.com/v11/finance/quoteSummary/$stockname?modules=defaultKeyStatistics%2CassetProfile%2Cprice%2CfinancialData'),
+            'https://yfapi.net/v11/finance/quoteSummary/$stockname?modules=defaultKeyStatistics%2CassetProfile%2Cprice%2CfinancialData'),
         headers: {
-          "X-RapidAPI-Key":
-              "26a2809002msh48a501964d878cap1f4e81jsnca7905f362b0",
-          "x-rapidapi-host": "yahoo-finance-low-latency.p.rapidapi.com"
+          "x-api-key": "OZpXZAYHfC7J9aPuClAkF2KpuZfnsv4C2FzQjWJu",
         });
     this.setState(() {
       stockdetail = jsonDecode(response.body);

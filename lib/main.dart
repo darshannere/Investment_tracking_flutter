@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:project/infopages/about.dart';
+import 'package:project/infopages/contacts.dart';
 import 'package:project/news/news.dart';
 import 'package:flutter/material.dart';
 import 'package:project/calculator.dart';
 import 'package:project/services/cryptolist.dart';
-import 'home_page.dart';
 import 'Login/loginpage.dart';
 import 'home.dart';
 import 'package:project/services/process.dart';
@@ -22,6 +23,8 @@ void main() async {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
+        '/about': (context) => about(),
+        '/contacts': (context) => contacts(),
         '/news': (context) => news(),
         '/calculator': (context) => Calculator(),
         '/cryptolist': (context) => cryptoHome_Page(),
