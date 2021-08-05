@@ -69,35 +69,35 @@ class _ProcessState extends State<test5> {
                 Text('Stocks',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 36,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold)),
-                Text(
-                  "November 23",
-                  style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 29,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                // Text(
+                //   "November 23",
+                //   style: TextStyle(
+                //     color: Colors.grey[400],
+                //     fontSize: 29,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
-                    height: 50,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          hintStyle: TextStyle(color: Colors.grey),
-                          hintText: 'Search',
-                          prefix: Icon(
-                            Icons.search,
-                            color: Colors.grey,
-                          ),
-                          fillColor: Colors.grey[800],
-                          filled: true,
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
-                              borderSide: BorderSide(style: BorderStyle.none))),
-                    ),
+                    height: 0,
+                    // child: TextField(
+                    //   decoration: InputDecoration(
+                    //       hintStyle: TextStyle(color: Colors.grey),
+                    //       hintText: 'Search',
+                    //       prefix: Icon(
+                    //         Icons.search,
+                    //         color: Colors.grey,
+                    //       ),
+                    //       fillColor: Colors.grey[800],
+                    //       filled: true,
+                    //       border: OutlineInputBorder(
+                    //           borderRadius:
+                    //               BorderRadius.all(Radius.circular(20)),
+                    //           borderSide: BorderSide(style: BorderStyle.none))),
+                    // ),
                   ),
                 ),
                 Expanded(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:project/adddata.dart';
 import 'package:project/infopages/about.dart';
 import 'package:project/infopages/contacts.dart';
 import 'package:project/news/news.dart';
@@ -23,6 +24,7 @@ void main() async {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
+        '/addata': (context) => addata(),
         '/about': (context) => about(),
         '/contacts': (context) => contacts(),
         '/news': (context) => news(),
