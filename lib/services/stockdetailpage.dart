@@ -50,7 +50,7 @@ class _stockdetailpageState extends State<stockdetailpage> {
       print(stockchartlist);
       if (stockchartlist != null && stockchartlist.isNotEmpty) {
         dynamic max = stockchartlist.first;
-        for (int i = 0; i <= 30; i++) {
+        for (int i = 0; i <= 50; i++) {
           if (stockchartlist[i] > max) {
             max = stockchartlist[i];
           }
@@ -60,13 +60,12 @@ class _stockdetailpageState extends State<stockdetailpage> {
       }
       if (stockchartlist != null && stockchartlist.isNotEmpty) {
         dynamic min = stockchartlist.first;
-        for (int i = 0; i <= 30; i++) {
+        for (int i = 0; i <= 50; i++) {
           if (stockchartlist[i] < min) {
             min = stockchartlist[i];
           }
         }
         miny = min.toDouble() - (min.toDouble() * 0.01);
-        print(miny);
       }
 
       //maxy = stockchartlist.reduce(max);

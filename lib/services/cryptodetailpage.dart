@@ -64,7 +64,7 @@ class _cryptodetailpageState extends State<cryptodetailpage> {
 
       if (cryptochartlist != null && cryptochartlist.isNotEmpty) {
         dynamic max = cryptochartlist.first[1];
-        for (int i = 0; i <= 30; i++) {
+        for (int i = 0; i <= 50; i++) {
           if (cryptochartlist[i][1] > max) {
             max = cryptochartlist[i][1];
           }
@@ -74,7 +74,7 @@ class _cryptodetailpageState extends State<cryptodetailpage> {
       }
       if (cryptochartlist != null && cryptochartlist.isNotEmpty) {
         dynamic min = cryptochartlist.first[1];
-        for (int i = 0; i <= 30; i++) {
+        for (int i = 0; i <= 50; i++) {
           if (cryptochartlist[i][1] < min) {
             min = cryptochartlist[i][1];
           }

@@ -1,3 +1,5 @@
+import 'package:project/loginpages/reser.dart';
+
 import 'CreateAccount.dart';
 import 'HomeScreen.dart';
 import 'Methods.dart';
@@ -95,6 +97,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
+                    ),
+                  ),
+                  TextButton(
+                    child: Text('Forgot Password?'),
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ResetScreen()),
                     ),
                   )
                 ],

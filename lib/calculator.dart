@@ -36,6 +36,8 @@ class CalculatorState extends State<Calculator> {
               Container(
                   padding: EdgeInsets.all(20.0),
                   child: TextField(
+                    style: TextStyle(color: Colors.white),
+                    cursorColor: Colors.white,
                     controller: _principalAmount,
                     decoration: InputDecoration(
                         labelText: "Enter Principal Amount",
@@ -45,6 +47,7 @@ class CalculatorState extends State<Calculator> {
               Container(
                   padding: EdgeInsets.all(20.0),
                   child: TextField(
+                    style: TextStyle(color: Colors.white),
                     controller: _interestRate,
                     decoration: InputDecoration(
                         labelText: "Interest Rate",
@@ -59,6 +62,7 @@ class CalculatorState extends State<Calculator> {
                           flex: 4,
                           fit: FlexFit.tight,
                           child: TextField(
+                            style: TextStyle(color: Colors.white),
                             controller: _tenure,
                             decoration: InputDecoration(
                                 labelText: "Tenure",

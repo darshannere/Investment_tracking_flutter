@@ -32,6 +32,8 @@ dependencies:
   http: ^0.13.3
   random_color: ^1.0.3
   url_launcher: ^6.0.9
+  flutter_icons: ^1.1.0
+  ionicons: ^0.1.2
   
   
   

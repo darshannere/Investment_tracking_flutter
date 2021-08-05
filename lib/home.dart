@@ -1,7 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project/news/news.dart';
+import 'package:project/portfolio.dart';
+import 'package:project/services/cryptolist.dart';
 import 'package:project/services/process.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ionicons/ionicons.dart';
+import 'calculator.dart';
 import 'loginpages/Methods.dart';
 
 class Home extends StatefulWidget {
@@ -12,13 +18,20 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int _currentIndex = 0;
+
+  final tabs = [portfolio(), test5(), cryptoHome_Page(), Calculator(), news()];
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   var data;
 
   addData() {
     Map<String, dynamic> demoData = {"name": "Darshan Nere", "age": "19"};
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection('data');
-    collectionReference.add(demoData);
+    String uid = _auth.currentUser!.uid.toString();
+    DocumentReference<Map<String, dynamic>> collectionReference =
+        FirebaseFirestore.instance.collection('data').doc(uid);
+    collectionReference.set(demoData);
   }
 
   fetchData() {
@@ -59,7 +72,7 @@ class _HomeState extends State<Home> {
                 height: 50,
               ),
               Text(
-                'Name:',
+                "name",
                 style: TextStyle(
                   color: Colors.blueGrey,
                   letterSpacing: 2,
@@ -70,11 +83,11 @@ class _HomeState extends State<Home> {
                 height: 35,
               ),
               Text(
-                'Email id:',
+                _auth.currentUser!.email.toString(),
                 style: TextStyle(
                   color: Colors.blueGrey,
                   letterSpacing: 2,
-                  fontSize: 25,
+                  fontSize: 15,
                 ),
               ),
               SizedBox(
@@ -108,134 +121,14 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Homescreen'),
         backgroundColor: Colors.black,
       ),
-      body: Container(
-        color: Colors.black,
-        child: ListView(children: [
-          SizedBox(
-            height: 30,
-          ),
-          Container(
-            child: TextButton(
-              onPressed: addData,
-              child: Text("Add data"),
-            ),
-          ),
-          Container(
-            child: TextButton(
-              onPressed: fetchData,
-              child: Text("Fetch data"),
-            ),
-          ),
-          Container(
-            child: TextButton(
-              onPressed: deletdata,
-              child: Text("Delete data"),
-            ),
-          ),
-          Container(
-            child: TextButton(
-              onPressed: () {
-                logOut(context);
-              },
-              child: Text(
-                "LogOut",
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/cryptolist');
-            },
-            child: Card(
-              elevation: 10,
-              color: Colors.grey[900],
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                child: Text(
-                  'Cryptos',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/stocklist');
-            },
-            child: Card(
-              elevation: 10,
-              color: Colors.grey[900],
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                child: Text(
-                  'Stocks',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
-                ),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/calculator');
-            },
-            child: Card(
-              elevation: 10,
-              color: Colors.grey[900],
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                child: Text(
-                  'Calculator',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/news');
-            },
-            child: Card(
-              elevation: 10,
-              color: Colors.grey[900],
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                child: Text(
-                  'News',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Text(data.toString(), style: TextStyle(color: Colors.white))
-        ]),
-      ),
-
-// sdad
-//sdasd
-//dsadsdsa,
+      body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.black,
+        unselectedItemColor: Colors.white,
+        currentIndex: _currentIndex,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
@@ -246,19 +139,38 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.monetization_on_rounded,
+              Icons.stacked_line_chart,
               color: Colors.grey,
             ),
-            label: 'Business',
+            label: 'Stocks',
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.now_widgets,
+              Icons.monetization_on_rounded,
               color: Colors.grey,
             ),
-            label: 'School',
+            label: 'Crypto',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.calculate_rounded,
+              color: Colors.grey,
+            ),
+            label: 'Calculator',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              CupertinoIcons.news_solid,
+              color: Colors.grey,
+            ),
+            label: 'News',
           ),
         ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
     );
   }
