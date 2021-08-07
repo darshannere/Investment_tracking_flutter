@@ -73,16 +73,20 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 90, 0, 0),
+        child: Container(
+          color: Colors.grey[900],
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(
+                height: 80,
+              ),
               Center(
                 child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
                   backgroundImage: NetworkImage(
-                      "https://images.unsplash.com/photo-1542779283-429940ce8336?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cG9rZW1vbnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"),
-                  radius: 50,
+                      "https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659651_1280.png"),
+                  radius: 80,
                 ),
               ),
               Divider(
@@ -94,9 +98,9 @@ class _HomeState extends State<Home> {
                     if (snapshot.connectionState != ConnectionState.done)
                       return Text("Loading data...Please wait");
                     return Text(
-                      "Name : $_userName",
+                      "  Name : $_userName",
                       style: TextStyle(
-                        color: Colors.blueGrey,
+                        color: Colors.white,
                         letterSpacing: 2,
                         fontSize: 15,
                       ),
@@ -106,42 +110,36 @@ class _HomeState extends State<Home> {
                 height: 35,
               ),
               Text(
-                "Email : " + _auth.currentUser!.email.toString(),
+                "  Email : " + _auth.currentUser!.email.toString(),
                 style: TextStyle(
-                  color: Colors.blueGrey,
+                  color: Colors.white,
                   letterSpacing: 2,
                   fontSize: 15,
                 ),
               ),
               SizedBox(
-                height: 35,
+                height: 30,
               ),
               TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/about');
                   },
-                  child: Text("About")),
-              SizedBox(
-                height: 35,
-              ),
+                  child: Text("  About")),
               TextButton(
                   onPressed: () {
                     logOut(context);
                   },
-                  child: Text("logout")),
-              SizedBox(
-                height: 35,
-              ),
+                  child: Text("  Logout")),
               TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/contacts');
                   },
-                  child: Text("Contacts")),
+                  child: Text("  Contacts")),
               TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/addata');
                   },
-                  child: Text("addata")),
+                  child: Text("  Addata")),
             ],
           ),
         ),

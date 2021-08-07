@@ -76,57 +76,91 @@ class _addataState extends State<addata> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Form ")),
-        body: Column(
-          children: [
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFormField(
-                    controller: name,
-                    decoration: InputDecoration(hintText: "stockname"),
+        appBar: AppBar(
+          title: Text("Add assets "),
+          backgroundColor: Colors.black,
+        ),
+        body: Container(
+          color: Colors.black,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+            child: Column(
+              children: [
+                Text(
+                  "Enter asset details",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
-                  TextFormField(
-                    controller: quant,
-                    decoration: InputDecoration(hintText: "quantity"),
-                  ),
-                  TextFormField(
-                    controller: pri,
-                    decoration: InputDecoration(hintText: "price"),
-                  ),
-
-                  RaisedButton(
-                      child: Text(
-                        'Submit',
-                        style: TextStyle(color: Colors.blue, fontSize: 16),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  color: Colors.black,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextFormField(
+                          style: TextStyle(color: Colors.white),
+                          controller: name,
+                          decoration: InputDecoration(
+                              hintText: "stockname/cryptoname",
+                              hintStyle: TextStyle(color: Colors.grey))),
+                      SizedBox(
+                        height: 20,
                       ),
-                      onPressed: () {
-                        Map<String, dynamic> data = {
-                          "stockname": name.text,
-                          "quantity": quant.text,
-                          "price": pri.text
-                        };
-                        String uid = _auth.currentUser!.uid.toString();
-                        CollectionReference<Map<String, dynamic>>
-                            collectionReference = FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(uid)
-                                .collection('stocks');
-                        collectionReference.add(data);
-                      }),
-                  Text(myController.text)
-                  // Add TextFormFields and ElevatedButton here.
-                ],
-              ),
+                      TextFormField(
+                          style: TextStyle(color: Colors.white),
+                          controller: quant,
+                          decoration: InputDecoration(
+                              hintText: "quantity",
+                              hintStyle: TextStyle(color: Colors.grey))),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                          style: TextStyle(color: Colors.white),
+                          controller: pri,
+                          decoration: InputDecoration(
+                              hintText: "price",
+                              hintStyle: TextStyle(color: Colors.grey))),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      RaisedButton(
+                          child: Text(
+                            'Submit',
+                            style: TextStyle(color: Colors.blue, fontSize: 16),
+                          ),
+                          onPressed: () {
+                            Map<String, dynamic> data = {
+                              "stockname": name.text,
+                              "quantity": quant.text,
+                              "price": pri.text
+                            };
+                            String uid = _auth.currentUser!.uid.toString();
+                            CollectionReference<Map<String, dynamic>>
+                                collectionReference = FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(uid)
+                                    .collection('stocks');
+                            collectionReference.add(data);
+                          }),
+                      Text(myController.text)
+                      // Add TextFormFields and ElevatedButton here.
+                    ],
+                  ),
+                ),
+                Container(
+                  child: TextButton(
+                    onPressed: adduserstock,
+                    child: Text("add"),
+                  ),
+                )
+              ],
             ),
-            Container(
-              child: TextButton(
-                onPressed: adduserstock,
-                child: Text("add"),
-              ),
-            )
-          ],
+          ),
         ));
   }
 }

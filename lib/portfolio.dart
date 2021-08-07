@@ -61,6 +61,16 @@ class _portfolioState extends State<portfolio> {
   }
 
   late List<PieChartSectionData> _sections;
+  late PieChartSectionData _item6;
+  late PieChartSectionData _item1;
+  late PieChartSectionData _item2;
+  late PieChartSectionData _item3;
+  late PieChartSectionData _item4;
+  late PieChartSectionData _item5;
+  late PieChartSectionData _item7;
+  late PieChartSectionData _item8;
+  late PieChartSectionData _item9;
+
 
   @override
   void initState() {
@@ -70,30 +80,34 @@ class _portfolioState extends State<portfolio> {
     print(stocklist);
 
     PieChartSectionData _item1 = PieChartSectionData(
-        color: Colors.blueAccent,
+        color:
+            Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
         value: 500000,
         title: 'WIPRO',
         radius: 50,
         titleStyle: TextStyle(color: Colors.white, fontSize: 14));
+
     PieChartSectionData _item2 = PieChartSectionData(
-        color: Colors.purpleAccent,
+        color:
+            Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
         value: 640000,
         title: 'Reliance',
         radius: 50,
         titleStyle: TextStyle(color: Colors.white, fontSize: 14));
     PieChartSectionData _item3 = PieChartSectionData(
-        color: Colors.cyanAccent,
+        color:
+            Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
         value: 1000000,
         title: 'SBIN',
         radius: 50,
         titleStyle: TextStyle(color: Colors.white, fontSize: 14));
     PieChartSectionData _item4 = PieChartSectionData(
-        color: Colors.orangeAccent,
+        color:
+            Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
         value: 1300000,
         title: 'NTPC',
         radius: 50,
         titleStyle: TextStyle(color: Colors.white, fontSize: 14));
-    _sections = [_item1, _item2, _item3, _item4];
   }
 
 // ignore: deprecated_member_use
@@ -116,13 +130,99 @@ class _portfolioState extends State<portfolio> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold)),
                     Container(
-                      child: AspectRatio(
-                          aspectRatio: 2,
-                          child: PieChart(PieChartData(
-                              sections: _sections,
-                              borderData: FlBorderData(show: false),
-                              centerSpaceRadius: 40))),
-                    ),
+                        child: AspectRatio(
+                      aspectRatio: 2,
+                      child: StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(_auth.currentUser!.uid)
+                              .collection('stocks')
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            PieChartSectionData _item7;
+                            return PieChart(PieChartData(
+                                sections: [
+                                  _item1 = PieChartSectionData(
+                                      color: Color((Random().nextDouble() * 0xFFFFFF)
+                                              .toInt())
+                                          .withOpacity(1.0),
+                                      radius: 50,
+                                      title: snapshot.data!.docs[0]
+                                          ["stockname"],
+                                      value: double.parse(
+                                              snapshot.data!.docs[0]["price"]) *
+                                          double.parse(snapshot.data!.docs[0]
+                                              ["quantity"]),
+                                      titleStyle: TextStyle(
+                                          color: Colors.white, fontSize: 14)),
+                                  _item2 = PieChartSectionData(
+                                      color: Color((Random().nextDouble() * 0xFFFFFF)
+                                              .toInt())
+                                          .withOpacity(1.0),
+                                      radius: 50,
+                                      title: snapshot.data!.docs[1]
+                                          ["stockname"],
+                                      value: double.parse(
+                                              snapshot.data!.docs[1]["price"]) *
+                                          double.parse(snapshot.data!.docs[1]
+                                              ["quantity"]),
+                                      titleStyle: TextStyle(
+                                          color: Colors.white, fontSize: 14)),
+                                           _item3 = PieChartSectionData(
+                                      color: Color((Random().nextDouble() * 0xFFFFFF)
+                                              .toInt())
+                                          .withOpacity(1.0),
+                                      radius: 50,
+                                      title: snapshot.data!.docs[2]
+                                          ["stockname"],
+                                      value: double.parse(
+                                              snapshot.data!.docs[2]["price"]) *
+                                          double.parse(snapshot.data!.docs[2]
+                                              ["quantity"]),
+                                      titleStyle: TextStyle(
+                                          color: Colors.white, fontSize: 14)),
+                                           _item4 = PieChartSectionData(
+                                      color: Color((Random().nextDouble() * 0xFFFFFF)
+                                              .toInt())
+                                          .withOpacity(1.0),
+                                      radius: 50,
+                                      title: snapshot.data!.docs[3]
+                                          ["stockname"],
+                                      value: double.parse(
+                                              snapshot.data!.docs[3]["price"]) *
+                                          double.parse(snapshot.data!.docs[3]
+                                              ["quantity"]),
+                                      titleStyle: TextStyle(
+                                          color: Colors.white, fontSize: 14)),
+                                           _item5 = PieChartSectionData(
+                                      color: Color((Random().nextDouble() * 0xFFFFFF)
+                                              .toInt())
+                                          .withOpacity(1.0),
+                                      radius: 50,
+                                      title: snapshot.data!.docs[4]
+                                          ["stockname"],
+                                      value: double.parse(
+                                              snapshot.data!.docs[4]["price"]) *
+                                          double.parse(snapshot.data!.docs[4]
+                                              ["quantity"]),
+                                      titleStyle: TextStyle(
+                                          color: Colors.white, fontSize: 14)),
+                                ],
+                                borderData: FlBorderData(show: false),
+                                centerSpaceRadius: 40));
+                          }),
+                    )
+                        //  PieChart(PieChartData(
+                        //     sections: _sections,
+                        //     borderData: FlBorderData(show: false),
+                        //     centerSpaceRadius: 40))),
+                        ),
                     Expanded(
                       child: StreamBuilder(
                         stream: FirebaseFirestore.instance
