@@ -20,7 +20,6 @@ class _portfolioState extends State<portfolio> {
     collectionReference.snapshots().listen((snapshot) {
       setState(() {
         data = snapshot.docs[0].data();
-        print(data);
       });
     });
   }

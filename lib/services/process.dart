@@ -79,27 +79,27 @@ class _ProcessState extends State<test5> {
                 //     fontWeight: FontWeight.bold,
                 //   ),
                 // ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: SizedBox(
-                    height: 0,
-                    // child: TextField(
-                    //   decoration: InputDecoration(
-                    //       hintStyle: TextStyle(color: Colors.grey),
-                    //       hintText: 'Search',
-                    //       prefix: Icon(
-                    //         Icons.search,
-                    //         color: Colors.grey,
-                    //       ),
-                    //       fillColor: Colors.grey[800],
-                    //       filled: true,
-                    //       border: OutlineInputBorder(
-                    //           borderRadius:
-                    //               BorderRadius.all(Radius.circular(20)),
-                    //           borderSide: BorderSide(style: BorderStyle.none))),
-                    // ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 10),
+                //   child: SizedBox(
+                //     height: 30,
+                //     child: TextField(
+                //       decoration: InputDecoration(
+                //           hintStyle: TextStyle(color: Colors.grey),
+                //           hintText: 'Search',
+                //           prefix: Icon(
+                //             Icons.search,
+                //             color: Colors.grey,
+                //           ),
+                //           fillColor: Colors.grey[800],
+                //           filled: true,
+                //           border: OutlineInputBorder(
+                //               borderRadius:
+                //                   BorderRadius.all(Radius.circular(20)),
+                //               borderSide: BorderSide(style: BorderStyle.none))),
+                //     ),
+                //   ),
+                // ),
                 Expanded(
                   child: new ListView.builder(
                     // ignore: unnecessary_null_comparison

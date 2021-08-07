@@ -14,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   bool isLoading = false;
+  bool _isHidden = true;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     width: size.width / 1.1,
                     child: Text(
-                      "Sign In to Contiue!",
+                      "Sign In to Continue!",
                       style: TextStyle(
                         color: Colors.grey[700],
                         fontSize: 25,
@@ -73,13 +74,35 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: field(size, "email", Icons.account_box, _email),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 18.0),
-                    child: Container(
-                      width: size.width,
-                      alignment: Alignment.center,
-                      child: field(size, "password", Icons.lock, _password),
-                    ),
-                  ),
+                      padding: const EdgeInsets.symmetric(vertical: 18.0),
+                      child: Container(
+                        height: size.height / 14,
+                        width: size.width / 1.1,
+                        child: TextField(
+                            controller: _password,
+                            obscureText: _isHidden,
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.lock),
+                                hintText: 'Password',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                suffix: InkWell(
+                                  onTap: _togglePasswordView,
+                                  child: Icon(
+                                    _isHidden
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                ))),
+                      )
+                      //  Container(
+                      //   width: size.width,
+                      //   alignment: Alignment.center,
+                      //   child: field(size, "password", Icons.lock, _password),
+                      // ),
+                      ),
                   SizedBox(
                     height: size.height / 10,
                   ),
@@ -109,6 +132,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
     );
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
   }
 
   Widget customButton(Size size) {
