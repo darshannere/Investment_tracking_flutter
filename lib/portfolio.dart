@@ -71,7 +71,6 @@ class _portfolioState extends State<portfolio> {
   late PieChartSectionData _item8;
   late PieChartSectionData _item9;
 
-
   @override
   void initState() {
     super.initState();
@@ -174,7 +173,7 @@ class _portfolioState extends State<portfolio> {
                                               ["quantity"]),
                                       titleStyle: TextStyle(
                                           color: Colors.white, fontSize: 14)),
-                                           _item3 = PieChartSectionData(
+                                  _item3 = PieChartSectionData(
                                       color: Color((Random().nextDouble() * 0xFFFFFF)
                                               .toInt())
                                           .withOpacity(1.0),
@@ -187,7 +186,7 @@ class _portfolioState extends State<portfolio> {
                                               ["quantity"]),
                                       titleStyle: TextStyle(
                                           color: Colors.white, fontSize: 14)),
-                                           _item4 = PieChartSectionData(
+                                  _item4 = PieChartSectionData(
                                       color: Color((Random().nextDouble() * 0xFFFFFF)
                                               .toInt())
                                           .withOpacity(1.0),
@@ -200,7 +199,7 @@ class _portfolioState extends State<portfolio> {
                                               ["quantity"]),
                                       titleStyle: TextStyle(
                                           color: Colors.white, fontSize: 14)),
-                                           _item5 = PieChartSectionData(
+                                  _item5 = PieChartSectionData(
                                       color: Color((Random().nextDouble() * 0xFFFFFF)
                                               .toInt())
                                           .withOpacity(1.0),
