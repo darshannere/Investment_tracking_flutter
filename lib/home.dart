@@ -24,7 +24,21 @@ class _HomeState extends State<Home> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  var _userName;
   var data;
+  var document =
+      FirebaseFirestore.instance.doc(FirebaseAuth.instance.currentUser!.uid);
+
+  fetchuserdata() {
+    String uid = _auth.currentUser!.uid.toString();
+    DocumentReference<Map<String, dynamic>> collectionReference =
+        FirebaseFirestore.instance.collection('users').doc(uid);
+    // ignore: non_constant_identifier_names
+    _userName = collectionReference
+        .get()
+        .then((DocumentSnapshot) => print(DocumentSnapshot.data()));
+  }
 
   addData() {
     Map<String, dynamic> demoData = {"name": "Darshan Nere", "age": "19"};
@@ -40,7 +54,6 @@ class _HomeState extends State<Home> {
     collectionReference.snapshots().listen((snapshot) {
       setState(() {
         data = snapshot.docs[0].data();
-        print(data);
       });
     });
   }
@@ -72,7 +85,7 @@ class _HomeState extends State<Home> {
                 height: 50,
               ),
               Text(
-                "name",
+                _userName.toString(),
                 style: TextStyle(
                   color: Colors.blueGrey,
                   letterSpacing: 2,
@@ -114,6 +127,11 @@ class _HomeState extends State<Home> {
                     Navigator.pushNamed(context, '/contacts');
                   },
                   child: Text("Contacts")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/addata');
+                  },
+                  child: Text("addata")),
             ],
           ),
         ),

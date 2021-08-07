@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'Methods.dart';
 import 'package:flutter/material.dart';
 import 'HomeScreen.dart';
@@ -11,7 +14,16 @@ class _CreateAccountState extends State<CreateAccount> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isLoading = false;
+  bool _isHidden = true;
+  adduser(name, email) {
+    Map<String, dynamic> demoData = {"name": name, "email": email};
+    String uid = _auth.currentUser!.uid.toString();
+    DocumentReference<Map<String, dynamic>> collectionReference =
+        FirebaseFirestore.instance.collection('users').doc(uid);
+    collectionReference.set(demoData);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +66,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   Container(
                     width: size.width / 1.1,
                     child: Text(
-                      "Create Account to Contiue!",
+                      "Create Account to Continue!",
                       style: TextStyle(
                         color: Colors.grey[700],
                         fontSize: 20,
@@ -79,13 +91,35 @@ class _CreateAccountState extends State<CreateAccount> {
                     child: field(size, "email", Icons.account_box, _email),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 18.0),
-                    child: Container(
-                      width: size.width,
-                      alignment: Alignment.center,
-                      child: field(size, "password", Icons.lock, _password),
-                    ),
-                  ),
+                      padding: const EdgeInsets.symmetric(vertical: 18.0),
+                      child: Container(
+                        height: size.height / 14,
+                        width: size.width / 1.1,
+                        child: TextField(
+                            controller: _password,
+                            obscureText: _isHidden,
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.lock),
+                                hintText: 'Password',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                suffix: InkWell(
+                                  onTap: _togglePasswordView,
+                                  child: Icon(
+                                    _isHidden
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                ))),
+                      )
+                      // Container(
+                      //   width: size.width,
+                      //   alignment: Alignment.center,
+                      //   child: field(size, "password", Icons.lock, _password),
+                      // ),
+                      ),
                   SizedBox(
                     height: size.height / 20,
                   ),
@@ -138,6 +172,7 @@ class _CreateAccountState extends State<CreateAccount> {
         } else {
           print("Please enter Fields");
         }
+        adduser(_name, _email);
       },
       child: Container(
           height: size.height / 14,
@@ -156,6 +191,12 @@ class _CreateAccountState extends State<CreateAccount> {
             ),
           )),
     );
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
   }
 
   Widget field(
