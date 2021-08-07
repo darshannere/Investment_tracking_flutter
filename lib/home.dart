@@ -27,18 +27,22 @@ class _HomeState extends State<Home> {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   var _userName;
   var data;
-  var document =
-      FirebaseFirestore.instance.doc(FirebaseAuth.instance.currentUser!.uid);
+  var document = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .get();
+  var myEmail;
 
-  fetchuserdata() {
-    String uid = _auth.currentUser!.uid.toString();
-    DocumentReference<Map<String, dynamic>> collectionReference =
-        FirebaseFirestore.instance.collection('users').doc(uid);
-    // ignore: non_constant_identifier_names
-    _userName = collectionReference
-        .get()
-        .then((DocumentSnapshot) => print(DocumentSnapshot.data()));
-  }
+  // fetchuserdata() {
+  //   String uid = _auth.currentUser!.uid.toString();
+  //   DocumentReference<Map<String, dynamic>> collectionReference =
+  //       FirebaseFirestore.instance.collection('users').doc(uid);
+
+  //   // ignore: non_constant_identifier_names
+  //   _userName = collectionReference
+  //       .get()
+  //       .then((ds) => print(ds.data()));
+  // }
 
   addData() {
     Map<String, dynamic> demoData = {"name": "Darshan Nere", "age": "19"};
@@ -84,19 +88,25 @@ class _HomeState extends State<Home> {
               Divider(
                 height: 50,
               ),
-              Text(
-                _userName.toString(),
-                style: TextStyle(
-                  color: Colors.blueGrey,
-                  letterSpacing: 2,
-                  fontSize: 25,
-                ),
-              ),
+              FutureBuilder(
+                  future: fetchuserdata(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done)
+                      return Text("Loading data...Please wait");
+                    return Text(
+                      "Name : $_userName",
+                      style: TextStyle(
+                        color: Colors.blueGrey,
+                        letterSpacing: 2,
+                        fontSize: 15,
+                      ),
+                    );
+                  }),
               SizedBox(
                 height: 35,
               ),
               Text(
-                _auth.currentUser!.email.toString(),
+                "Email : " + _auth.currentUser!.email.toString(),
                 style: TextStyle(
                   color: Colors.blueGrey,
                   letterSpacing: 2,
@@ -191,5 +201,21 @@ class _HomeState extends State<Home> {
         },
       ),
     );
+  }
+
+  fetchuserdata() async {
+    final firebaseUser = await FirebaseAuth.instance.currentUser!;
+    if (firebaseUser != null)
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get()
+          .then((ds) {
+        myEmail = ds.data()!['email'];
+        _userName = ds.data()!['name'];
+        print(myEmail);
+      }).catchError((e) {
+        print(e);
+      });
   }
 }

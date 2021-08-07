@@ -10,7 +10,11 @@ class addata extends StatefulWidget {
 }
 
 class _addataState extends State<addata> {
+  TextEditingController name = new TextEditingController();
+  TextEditingController quant = new TextEditingController();
+  TextEditingController pri = new TextEditingController();
   final myController = TextEditingController();
+  var dataadded = false;
   @override
   void dispose() {
     myController.dispose();
@@ -30,6 +34,25 @@ class _addataState extends State<addata> {
     DocumentReference<Map<String, dynamic>> collectionReference =
         FirebaseFirestore.instance.collection('users').doc(uid);
     collectionReference.set(demoData);
+  }
+
+  adduserstock() {
+    Map<String, dynamic> demoData = {
+      "name": _auth.currentUser!.displayName,
+      "email": _auth.currentUser!.email
+    };
+    Map<String, dynamic> stockd = {
+      "stockname": " Nothing yet",
+      "price": "0",
+      "quantity": "0"
+    };
+    String uid = _auth.currentUser!.uid.toString();
+    CollectionReference<Map<String, dynamic>> collectionReference =
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .collection('stocks');
+    collectionReference.add(stockd);
   }
 
   Widget _buidname() {
@@ -57,34 +80,49 @@ class _addataState extends State<addata> {
         body: Column(
           children: [
             Container(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _buidname(),
-                    RaisedButton(
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(color: Colors.blue, fontSize: 16),
-                        ),
-                        onPressed: () {
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          }
-                          print(myController.text);
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    controller: name,
+                    decoration: InputDecoration(hintText: "stockname"),
+                  ),
+                  TextFormField(
+                    controller: quant,
+                    decoration: InputDecoration(hintText: "quantity"),
+                  ),
+                  TextFormField(
+                    controller: pri,
+                    decoration: InputDecoration(hintText: "price"),
+                  ),
 
-                          _formKey.currentState!.save();
-                        }),
-                    Text(myController.text)
-                    // Add TextFormFields and ElevatedButton here.
-                  ],
-                ),
+                  RaisedButton(
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(color: Colors.blue, fontSize: 16),
+                      ),
+                      onPressed: () {
+                        Map<String, dynamic> data = {
+                          "stockname": name.text,
+                          "quantity": quant.text,
+                          "price": pri.text
+                        };
+                        String uid = _auth.currentUser!.uid.toString();
+                        CollectionReference<Map<String, dynamic>>
+                            collectionReference = FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(uid)
+                                .collection('stocks');
+                        collectionReference.add(data);
+                      }),
+                  Text(myController.text)
+                  // Add TextFormFields and ElevatedButton here.
+                ],
               ),
             ),
             Container(
               child: TextButton(
-                onPressed: adduser,
+                onPressed: adduserstock,
                 child: Text("add"),
               ),
             )

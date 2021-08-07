@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class portfolio extends StatefulWidget {
   const portfolio({Key? key}) : super(key: key);
@@ -13,15 +16,48 @@ class portfolio extends StatefulWidget {
 
 class _portfolioState extends State<portfolio> {
   var data;
+  var stocklist;
+  List stocks = [];
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  fetchData() {
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection('stocks');
-    collectionReference.snapshots().listen((snapshot) {
-      setState(() {
-        data = snapshot.docs[0].data();
-      });
+  Future<String> getsData(stname) async {
+    var stock;
+    var response = await http.get(
+        Uri.parse(
+            'https://latest-stock-price.p.rapidapi.com/any?Identifier=$stname' +
+                'EQN'),
+        headers: {
+          "X-RapidAPI-Key": "b5e366e646msh24e4c9775b01424p1a625fjsnf41e0d7c9961"
+        });
+    this.setState(() {
+      stock = jsonDecode(response.body);
+      print(stock);
     });
+
+    return "Success!";
+  }
+
+  fetchuserstockdata() async {
+    List itemsList = [];
+    final firebaseUser = await FirebaseAuth.instance.currentUser!;
+    if (firebaseUser != null)
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .collection('stocks')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach(
+          (element) {
+            itemsList.add(element.data);
+          },
+        );
+        stocklist = itemsList;
+      }).catchError((e) {
+        print(e);
+      });
+    print(itemsList);
+    return itemsList;
   }
 
   late List<PieChartSectionData> _sections;
@@ -29,7 +65,10 @@ class _portfolioState extends State<portfolio> {
   @override
   void initState() {
     super.initState();
-    this.fetchData();
+    this.fetchuserstockdata();
+
+    print(stocklist);
+
     PieChartSectionData _item1 = PieChartSectionData(
         color: Colors.blueAccent,
         value: 500000,
@@ -63,120 +102,165 @@ class _portfolioState extends State<portfolio> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.black,
-        body: Scrollbar(
-          child: Column(children: [
-            Container(
-                padding: EdgeInsets.all(10),
-                width: MediaQuery.of(context).size.width,
-                color: Colors.black,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Your Portfolio',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                      Column(children: [
-                        Container(
-                          child: AspectRatio(
-                              aspectRatio: 1.9,
-                              child: PieChart(PieChartData(
-                                  sections: _sections,
-                                  borderData: FlBorderData(show: false),
-                                  centerSpaceRadius: 40))),
-                        ),
-                        Container(
-                          child: ListTile(
-                            title: Text(
-                              _sections[0].title.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            subtitle: Text(
-                              'Total value' + _sections[0].value.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: ListTile(
-                            title: Text(
-                              _sections[1].title.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            subtitle: Text(
-                              'Total value' + _sections[1].value.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: ListTile(
-                            title: Text(
-                              _sections[2].title.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            subtitle: Text(
-                              'Total value' + _sections[2].value.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: ListTile(
-                            title: Text(
-                              _sections[3].title.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            subtitle: Text(
-                              'Total value' + _sections[3].value.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+        body: Stack(children: [
+          Container(
+              padding: EdgeInsets.all(10),
+              width: MediaQuery.of(context).size.width,
+              color: Colors.black,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Your Portfolio',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                    Container(
+                      child: AspectRatio(
+                          aspectRatio: 2,
+                          child: PieChart(PieChartData(
+                              sections: _sections,
+                              borderData: FlBorderData(show: false),
+                              centerSpaceRadius: 40))),
+                    ),
+                    Expanded(
+                      child: StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(_auth.currentUser!.uid)
+                            .collection('stocks')
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return SizedBox(
+                            height: 300,
+                            child: ListView.builder(
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  return Card(
+                                    child: ListTile(
+                                      subtitle: _getSubtitleText(
+                                          double.parse(snapshot
+                                              .data!.docs[index]["price"]),
+                                          (snapshot.data!.docs[index]
+                                              ["stockname"])),
+                                      trailing: Text(snapshot.data!.docs[index]
+                                          ["quantity"]),
+                                      title: Text(snapshot.data!.docs[index]
+                                          ["stockname"]),
+                                    ),
+                                  );
+                                }),
+                          );
+                        },
+                      ),
+                    ),
+                  ]))
+        ]));
+  }
 
-                        // Container(
-                        //   child: new ListView.builder(
-                        //     // ignore: unnecessary_null_comparison
-                        //     itemCount: _sections == null ? 0 : _sections.length,
-                        //     itemBuilder: (BuildContext context, int index) {
-                        //       // ignore: unused_local_variable
+  Widget _getSubtitleText(double price, String sname) {
+    TextSpan priceTextWidget = new TextSpan(
+        text: "price bought: ₹$price   ",
+        style: TextStyle(color: Colors.grey[600]));
 
-                        //       return new ListTile(
-                        //         dense: true,
-                        //         // leading: new CircleAvatar(
-                        //         //   backgroundColor: Color(
-                        //         //           (Random().nextDouble() * 0xFFFFFF)
-                        //         //               .toInt())
-                        //         //       .withOpacity(1.0),
-                        //         //   child: new Text(_sections[index].title[0]),
-                        //         // ),
-                        //         title: new Text(
-                        //           _sections[index].title,
-                        //           style: new TextStyle(
-                        //               fontWeight: FontWeight.bold,
-                        //               color: Colors.white),
-                        //         ),
-                        //         subtitle: new Text(
-                        //           'Total value' +
-                        //               _sections[index].value.toString(),
-                        //           style: new TextStyle(
-                        //               fontWeight: FontWeight.bold,
-                        //               color: Colors.white),
-                        //         ),
-                        //       );
-                        //     },
-                        //   ),
-                        // )
-                      ]),
-                    ]))
-          ]),
-        ));
+    TextSpan cpriceTextWidget = new TextSpan(
+        text: "price : ₹  ", style: TextStyle(color: Colors.grey[600]));
+
+    return new RichText(
+        text: new TextSpan(children: [priceTextWidget, cpriceTextWidget]));
   }
 }
 
 
 // ListTile(
+
 //                             title: Text(
 //                           _sections[0].title.toString(),
 //                           style: TextStyle(color: Colors.white),)),
+
+
+
+
+
+
+
+
+
+  // Container(
+  //                       child: ListTile(
+  //                         title: Text(
+  //                           _sections[0].title.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                         subtitle: Text(
+  //                           'Total value' + _sections[0].value.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     Container(
+  //                       child: ListTile(
+  //                         title: Text(
+  //                           _sections[1].title.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                         subtitle: Text(
+  //                           'Total value' + _sections[1].value.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     Container(
+  //                       child: ListTile(
+  //                         title: Text(
+  //                           _sections[1].title.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                         subtitle: Text(
+  //                           'Total value' + _sections[1].value.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     Container(
+  //                       child: ListTile(
+  //                         title: Text(
+  //                           _sections[1].title.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                         subtitle: Text(
+  //                           'Total value' + _sections[1].value.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     Container(
+  //                       child: ListTile(
+  //                         title: Text(
+  //                           _sections[2].title.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                         subtitle: Text(
+  //                           'Total value' + _sections[2].value.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     Container(
+  //                       child: ListTile(
+  //                         title: Text(
+  //                           _sections[3].title.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                         subtitle: Text(
+  //                           'Total value' + _sections[3].value.toString(),
+  //                           style: TextStyle(color: Colors.white),
+  //                         ),
+  //                       ),
+  //                     ),

@@ -19,6 +19,12 @@ class _CreateAccountState extends State<CreateAccount> {
   bool _isHidden = true;
   adduser(name, email) {
     Map<String, dynamic> demoData = {"name": name, "email": email};
+    Map<String, dynamic> stockd = {
+      "stockname": " Nothing yet",
+      "price": "0",
+      "quantity": "0"
+    };
+
     String uid = _auth.currentUser!.uid.toString();
     DocumentReference<Map<String, dynamic>> collectionReference =
         FirebaseFirestore.instance.collection('users').doc(uid);
