@@ -27,10 +27,9 @@ class _aboutState extends State<about> {
             SizedBox(
               height: 50,
             ),
-            CircleAvatar(
-              radius: 60,
-              backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1542779283-429940ce8336?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cG9rZW1vbnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Image.asset('assets/icon/icon.png'),
             ),
             SizedBox(
               height: 80,

@@ -46,8 +46,10 @@ class cryptoHome_PageState extends State<cryptoHome_Page> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar:
-          new AppBar(title: new Text("Cryptos"), backgroundColor: Colors.black),
+      appBar: new AppBar(
+          automaticallyImplyLeading: false,
+          title: new Text("Cryptos"),
+          backgroundColor: Colors.black),
       body: Column(
         children: [
           Expanded(

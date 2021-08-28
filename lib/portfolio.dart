@@ -60,7 +60,7 @@ class _portfolioState extends State<portfolio> {
     return itemsList;
   }
 
-  late List<PieChartSectionData> _sections;
+  List<PieChartSectionData> _sections = [];
   late PieChartSectionData _item6;
   late PieChartSectionData _item1;
   late PieChartSectionData _item2;
@@ -110,6 +110,36 @@ class _portfolioState extends State<portfolio> {
   }
 
 // ignore: deprecated_member_use
+  createchartdata() {
+    StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(_auth.currentUser!.uid)
+            .collection('stocks')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          for (var i = 0; i < snapshot.data!.docs.length; i++) {
+            print(snapshot.data!.docs[i]["stockname"]);
+            _sections.add(
+              PieChartSectionData(
+                  color: Color((Random().nextDouble() * 0xFFFFFF).toInt())
+                      .withOpacity(1.0),
+                  radius: 50,
+                  title: snapshot.data!.docs[i]["stockname"],
+                  value: double.parse(snapshot.data!.docs[i]["price"]) *
+                      double.parse(snapshot.data!.docs[i]["quantity"]),
+                  titleStyle: TextStyle(color: Colors.white, fontSize: 14)),
+            );
+          }
+
+          return Text('');
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +176,8 @@ class _portfolioState extends State<portfolio> {
                             }
                             PieChartSectionData _item7;
                             return PieChart(PieChartData(
-                                sections: [
+                                sections: 
+                                [
                                   _item1 = PieChartSectionData(
                                       color: Color((Random().nextDouble() * 0xFFFFFF)
                                               .toInt())

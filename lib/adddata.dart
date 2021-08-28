@@ -152,12 +152,6 @@ class _addataState extends State<addata> {
                     ],
                   ),
                 ),
-                Container(
-                  child: TextButton(
-                    onPressed: adduserstock,
-                    child: Text("add"),
-                  ),
-                )
               ],
             ),
           ),
